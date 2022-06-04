@@ -9,7 +9,9 @@ func main() {
 	pulumi.Run(
 		func(ctx *pulumi.Context) error {
 			// get pre-existing managed zone
-			managedZone, err := dns.GetManagedZone(ctx, "nuggies-life", nil, nil, nil)
+			managedZone, err := dns.LookupManagedZone(ctx, &dns.LookupManagedZoneArgs{
+				Name: "nuggies-life",
+			}, nil)
 			if err != nil {
 				return err
 			}
@@ -19,7 +21,7 @@ func main() {
 				Name:        pulumi.String("foo.nuggies.life"),
 				Type:        pulumi.String("A"),
 				Ttl:         pulumi.IntPtr(1),
-				ManagedZone: managedZone.Name,
+				ManagedZone: pulumi.String(managedZone.Name),
 				Rrdatas:     pulumi.StringArray{pulumi.String("1.2.3.4")},
 			})
 			if err != nil {
