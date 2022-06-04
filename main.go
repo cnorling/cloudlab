@@ -20,6 +20,7 @@ func main() {
 				Type:        pulumi.String("A"),
 				Ttl:         pulumi.IntPtr(1),
 				ManagedZone: managedZone.Name,
+				Rrdatas:     pulumi.StringArray{pulumi.String("1.2.3.4")},
 			})
 			if err != nil {
 				return err
