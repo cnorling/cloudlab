@@ -16,7 +16,7 @@ func main() {
 				return err
 			}
 
-			// create a dns record
+			// create a single dns record
 			domain := "foo"
 			record, err := dns.NewRecordSet(ctx, domain, &dns.RecordSetArgs{
 				Name:        pulumi.String(domain),
