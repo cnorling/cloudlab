@@ -17,10 +17,11 @@ func main() {
 			}
 
 			// create a single dns record
-			record, err := dns.NewRecordSet(ctx, "foo.nuggies.life", &dns.RecordSetArgs{
-				Name:        pulumi.String("foo.nuggies.life"),
+			domain := "foo.nuggies.life"
+			record, err := dns.NewRecordSet(ctx, domain, &dns.RecordSetArgs{
+				Name:        pulumi.String(domain + "."),
 				Type:        pulumi.String("A"),
-				Ttl:         pulumi.IntPtr(1),
+				Ttl:         pulumi.Int(1),
 				ManagedZone: pulumi.String(managedZone.Name),
 				Rrdatas:     pulumi.StringArray{pulumi.String("1.2.3.4")},
 			})
