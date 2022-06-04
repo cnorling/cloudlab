@@ -1,6 +1,9 @@
 name: Pulumi
 on:
-  - pull_request
+  pull_request:
+    branches:
+      - "**"
+
 jobs:
   preview:
     name: Preview
@@ -9,7 +12,7 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2
 
-      - id: setup golang
+      - id: setup-golang
         uses: actions/setup-go@v2
         with:
           go-version: 1.16.x
