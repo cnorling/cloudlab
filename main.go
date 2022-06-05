@@ -1,10 +1,10 @@
 package main
 
 import (
+	"cloudlab/rbac"
+
 	"github.com/pulumi/pulumi-gcp/sdk/v6/go/gcp/dns"
 	"github.com/pulumi/pulumi-gcp/sdk/v6/go/gcp/organizations"
-	"github.com/pulumi/pulumi-gcp/sdk/v6/go/gcp/projects"
-	"github.com/pulumi/pulumi-gcp/sdk/v6/go/gcp/serviceaccount"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -16,55 +16,15 @@ func main() {
 			if err != nil {
 				return err
 			}
-			// this section is used to manage the pulumi serviceaccount with pulumi itself
-			// it namely makes adding permissions trivial
 
-			// create the pulumi serviceaccount
-			serviceaccountName := "pulumi"
-			pulumiServiceaccount, err := serviceaccount.NewAccount(ctx, serviceaccountName, &serviceaccount.AccountArgs{
-				AccountId:   pulumi.String(serviceaccountName),
-				DisplayName: pulumi.String(serviceaccountName),
-			}, pulumi.Protect(true))
-			if err != nil {
-				return err
-			}
-
-			// give the pulumi serviceaccount the dns admin role
-			_, err = projects.NewIAMBinding(ctx, "dns admin", &projects.IAMBindingArgs{
-				Project: pulumi.String(project.Id),
-				Role:    pulumi.String("roles/dns.admin"),
-				Members: pulumi.StringArray{
-					pulumiServiceaccount.Email.ApplyT(func(Email string) string {
-						return "serviceAccount:" + Email
-					}).(pulumi.StringOutput),
-				},
-			})
-			if err != nil {
-				return err
-			}
-
-			// give the pulumi serviceaccount the container admin role
-			_, err = projects.NewIAMBinding(ctx, "container admin", &projects.IAMBindingArgs{
-				Project: pulumi.String(project.Id),
-				Role:    pulumi.String("roles/container.admin"),
-				Members: pulumi.StringArray{
-					pulumiServiceaccount.Email.ApplyT(func(Email string) string {
-						return "serviceAccount:" + Email
-					}).(pulumi.StringOutput),
-				},
-			})
-			if err != nil {
-				return err
-			}
-
-			// give the pulumi serviceaccount the project iam admin role
-			_, err = projects.NewIAMBinding(ctx, "project IAM admin", &projects.IAMBindingArgs{
-				Project: pulumi.String(project.Id),
-				Role:    pulumi.String("roles/resourcemanager.projectIamAdmin"),
-				Members: pulumi.StringArray{
-					pulumiServiceaccount.Email.ApplyT(func(Email string) string {
-						return "serviceAccount:" + Email
-					}).(pulumi.StringOutput),
+			// homemade function to create sa and give it the roles
+			_, err = rbac.CreateAndRoleSa(ctx, rbac.Sa{
+				ProjectId:          project.Id,
+				ServiceaccountName: "pulumi",
+				ProjectRoles: []string{
+					"roles/dns.admin",
+					"roles/container.admin",
+					"roles/resourcemanager.projectIamAdmin",
 				},
 			})
 			if err != nil {
