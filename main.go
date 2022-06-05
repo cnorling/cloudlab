@@ -4,23 +4,17 @@ import (
 	"github.com/pulumi/pulumi-gcp/sdk/v6/go/gcp/dns"
 	"github.com/pulumi/pulumi-gcp/sdk/v6/go/gcp/serviceaccount"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 )
 
 func main() {
 	pulumi.Run(
 		func(ctx *pulumi.Context) error {
-			// get existing configuration
-			conf := config.New(ctx, "")
-			project := conf.Require("gcp:project")
-			ctx.Export("project", pulumi.String(project))
 
 			// manage the pulumi serviceaccount permissions
 			serviceaccountName := "pulumi"
 			_, err := serviceaccount.NewAccount(ctx, serviceaccountName, &serviceaccount.AccountArgs{
 				AccountId:   pulumi.String(serviceaccountName),
 				DisplayName: pulumi.String(serviceaccountName),
-				Project:     pulumi.String(project),
 			}, pulumi.Protect(true))
 			if err != nil {
 				return err
