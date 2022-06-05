@@ -10,12 +10,29 @@ func main() {
 	pulumi.Run(
 		func(ctx *pulumi.Context) error {
 
+			// this section is used to manage the pulumi serviceaccount with pulumi itself
+			// it namely makes adding permissions trivial
+
 			// manage the pulumi serviceaccount permissions
 			serviceaccountName := "pulumi"
-			_, err := serviceaccount.NewAccount(ctx, serviceaccountName, &serviceaccount.AccountArgs{
+			pulumiServiceaccount, err := serviceaccount.NewAccount(ctx, serviceaccountName, &serviceaccount.AccountArgs{
 				AccountId:   pulumi.String(serviceaccountName),
 				DisplayName: pulumi.String(serviceaccountName),
 			}, pulumi.Protect(true))
+			if err != nil {
+				return err
+			}
+
+			// give the pulumi serviceaccount the dns admin role
+			_, err = serviceaccount.NewIAMBinding(ctx, "dns admin", &serviceaccount.IAMBindingArgs{
+				ServiceAccountId: pulumiServiceaccount.Name,
+				Role:             pulumi.String("dns.admin"),
+				Members: pulumi.StringArray{
+					pulumiServiceaccount.Email.ApplyT(func(Email string) string {
+						return "serviceAccount:" + Email
+					}).(pulumi.StringOutput),
+				},
+			})
 			if err != nil {
 				return err
 			}
