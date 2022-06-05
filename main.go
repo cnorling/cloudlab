@@ -16,7 +16,6 @@ func main() {
 			if err != nil {
 				return err
 			}
-
 			// this section is used to manage the pulumi serviceaccount with pulumi itself
 			// it namely makes adding permissions trivial
 
@@ -34,6 +33,20 @@ func main() {
 			_, err = projects.NewIAMBinding(ctx, "dns admin", &projects.IAMBindingArgs{
 				Project: pulumi.String(project.Id),
 				Role:    pulumi.String("roles/dns.admin"),
+				Members: pulumi.StringArray{
+					pulumiServiceaccount.Email.ApplyT(func(Email string) string {
+						return "serviceAccount:" + Email
+					}).(pulumi.StringOutput),
+				},
+			})
+			if err != nil {
+				return err
+			}
+
+			// give the pulumi serviceaccount the container admin role
+			_, err = projects.NewIAMBinding(ctx, "container admin", &projects.IAMBindingArgs{
+				Project: pulumi.String(project.Id),
+				Role:    pulumi.String("roles/container.admin"),
 				Members: pulumi.StringArray{
 					pulumiServiceaccount.Email.ApplyT(func(Email string) string {
 						return "serviceAccount:" + Email
