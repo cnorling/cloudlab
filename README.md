@@ -1,6 +1,6 @@
 # ABOUT CLOUDLAB
 
-This is a personal repository I use to publicly illustrate how I setup infrastructure as code in terraform. If gitops, kubernetes, and infrastructure as code interests you, this repository is worth looking at. I will be focusing on Pulumi, GCP, and GKE in this repo.
+This is a personal repository I use to publicly illustrate how I setup infrastructure as code in pulumi. If gitops, kubernetes, and infrastructure as code interests you, this repository is worth looking at.
 
 ## but isn't the cloud really expensive?
 
