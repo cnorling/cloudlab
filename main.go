@@ -14,7 +14,7 @@ func main() {
 			// this section is used to manage the pulumi serviceaccount with pulumi itself
 			// it namely makes adding permissions trivial
 
-			// manage the pulumi serviceaccount permissions
+			// create the pulumi serviceaccount
 			serviceaccountName := "pulumi"
 			pulumiServiceaccount, err := serviceaccount.NewAccount(ctx, serviceaccountName, &serviceaccount.AccountArgs{
 				AccountId:   pulumi.String(serviceaccountName),
