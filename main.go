@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/pulumi/pulumi-gcp/sdk/v6/go/gcp/dns"
+	"github.com/pulumi/pulumi-gcp/sdk/v6/go/gcp/projects"
 	"github.com/pulumi/pulumi-gcp/sdk/v6/go/gcp/serviceaccount"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -24,10 +25,13 @@ func main() {
 			}
 
 			// give the pulumi serviceaccount the dns admin role
-			_, err = serviceaccount.NewIAMMember(ctx, "dns admin", &serviceaccount.IAMMemberArgs{
-				ServiceAccountId: pulumiServiceaccount.Name,
-				Role:             pulumi.String("roles/dns.admin"),
-				Member:           pulumi.String("allAuthenticatedUsers"),
+			_, err = projects.NewIAMBinding(ctx, "dns admin", &projects.IAMBindingArgs{
+				Role: pulumi.String("roles/dns.admin"),
+				Members: pulumi.StringArray{
+					pulumiServiceaccount.Email.ApplyT(func(Email string) string {
+						return "serviceAccount:" + Email
+					}).(pulumi.StringOutput),
+				},
 			})
 			if err != nil {
 				return err
