@@ -24,12 +24,10 @@ func main() {
 			}
 
 			// give the pulumi serviceaccount the dns admin role
-			_, err = serviceaccount.NewIAMBinding(ctx, "dns admin", &serviceaccount.IAMBindingArgs{
+			_, err = serviceaccount.NewIAMMember(ctx, "dns admin", &serviceaccount.IAMMemberArgs{
 				ServiceAccountId: pulumiServiceaccount.Name,
 				Role:             pulumi.String("roles/dns.admin"),
-				Members: pulumi.StringArray{
-					pulumi.String("allAuthenticatedUsers"),
-				},
+				Member:           pulumi.String("allAuthenticatedUsers"),
 			})
 			if err != nil {
 				return err
