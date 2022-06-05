@@ -28,9 +28,7 @@ func main() {
 				ServiceAccountId: pulumiServiceaccount.Name,
 				Role:             pulumi.String("roles/dns.admin"),
 				Members: pulumi.StringArray{
-					pulumiServiceaccount.Email.ApplyT(func(Email string) string {
-						return "serviceAccount:" + Email
-					}).(pulumi.StringOutput),
+					pulumi.String("allAuthenticatedUsers"),
 				},
 			})
 			if err != nil {
