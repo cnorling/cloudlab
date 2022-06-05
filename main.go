@@ -26,7 +26,7 @@ func main() {
 			// give the pulumi serviceaccount the dns admin role
 			_, err = serviceaccount.NewIAMBinding(ctx, "dns admin", &serviceaccount.IAMBindingArgs{
 				ServiceAccountId: pulumiServiceaccount.Name,
-				Role:             pulumi.String("dns.admin"),
+				Role:             pulumi.String("roles/dns.admin"),
 				Members: pulumi.StringArray{
 					pulumiServiceaccount.Email.ApplyT(func(Email string) string {
 						return "serviceAccount:" + Email
