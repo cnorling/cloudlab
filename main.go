@@ -18,7 +18,7 @@ func main() {
 
 			// create a single dns record
 			domain := "foo.nuggies.life"
-			record, err := dns.NewRecordSet(ctx, domain, &dns.RecordSetArgs{
+			_, err = dns.NewRecordSet(ctx, domain, &dns.RecordSetArgs{
 				Name:        pulumi.String(domain + "."),
 				Type:        pulumi.String("A"),
 				Ttl:         pulumi.Int(1),
@@ -28,9 +28,6 @@ func main() {
 			if err != nil {
 				return err
 			}
-
-			// log the dns record's name
-			ctx.Export("dns records created:", record.Name)
 			return nil
 		})
 }
