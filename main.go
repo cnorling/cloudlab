@@ -44,6 +44,20 @@ func main() {
 				return err
 			}
 
+			// give the pulumi serviceaccount the project iam admin role
+			_, err = projects.NewIAMBinding(ctx, "project IAM admin", &projects.IAMBindingArgs{
+				Project: pulumi.String(project.Id),
+				Role:    pulumi.String("roles/resourcemanager.projectIamAdmin"),
+				Members: pulumi.StringArray{
+					pulumiServiceaccount.Email.ApplyT(func(Email string) string {
+						return "serviceAccount:" + Email
+					}).(pulumi.StringOutput),
+				},
+			})
+			if err != nil {
+				return err
+			}
+
 			// get pre-existing managed zone
 			managedZone, err := dns.LookupManagedZone(ctx, &dns.LookupManagedZoneArgs{
 				Name: "nuggies-life",
