@@ -4,7 +4,7 @@ This is a personal repository I use to publicly illustrate how I setup infrastru
 
 ## but isn't the cloud really expensive?
 
-it can be, but there are tricks and things you can do in a kubernetes ecosystem that make working in a cloud provider like GCP a lot cheaper than you would think. My homelab costs me around $60 a month.
+it can be, but there are tricks and things you can do in a kubernetes ecosystem that make working in a cloud provider like GCP a lot cheaper than you would think. My homelab costs me around $60 a month. That doesn't include one-time related costs like buying domain names.
 
 ## how can I minimize cloud homelabbing costs?
 
