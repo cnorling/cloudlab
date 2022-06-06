@@ -25,6 +25,7 @@ func main() {
 					"roles/dns.admin",
 					"roles/container.admin",
 					"roles/resourcemanager.projectIamAdmin",
+					"roles/compute.admin",
 				},
 			})
 			if err != nil {
