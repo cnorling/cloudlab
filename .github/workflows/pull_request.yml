@@ -1,8 +1,12 @@
 name: Pulumi
 on:
   pull_request:
-    branches:
-      - "**"
+    paths:
+      - go.mod
+      - go.sum
+      - main.go
+      - pulumi.prod.yaml
+      - pulumi.yaml
 
 jobs:
   preview:
