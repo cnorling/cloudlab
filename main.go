@@ -3,7 +3,6 @@ package main
 import (
 	"cloudlab/rbac"
 
-	"github.com/pulumi/pulumi-gcp/sdk/v6/go/gcp/dns"
 	"github.com/pulumi/pulumi-gcp/sdk/v6/go/gcp/organizations"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -25,32 +24,6 @@ func main() {
 					"roles/dns.admin",
 					"roles/container.admin",
 					"roles/resourcemanager.projectIamAdmin",
-				},
-			})
-			if err != nil {
-				return err
-			}
-
-			// get pre-existing managed zone
-			managedZone, err := dns.LookupManagedZone(ctx, &dns.LookupManagedZoneArgs{
-				Name: "salinesel-in",
-			}, nil)
-			if err != nil {
-				return err
-			}
-
-			// create a dns record for github pages
-			domain := "salinesel.in"
-			_, err = dns.NewRecordSet(ctx, domain, &dns.RecordSetArgs{
-				Name:        pulumi.String(domain + "."),
-				Type:        pulumi.String("A"),
-				Ttl:         pulumi.Int(1),
-				ManagedZone: pulumi.String(managedZone.Name),
-				Rrdatas: pulumi.StringArray{
-					pulumi.String("185.199.108.153"),
-					pulumi.String("185.199.109.153"),
-					pulumi.String("185.199.110.153"),
-					pulumi.String("185.199.111.153"),
 				},
 			})
 			if err != nil {
