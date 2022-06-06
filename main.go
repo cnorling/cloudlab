@@ -33,20 +33,25 @@ func main() {
 
 			// get pre-existing managed zone
 			managedZone, err := dns.LookupManagedZone(ctx, &dns.LookupManagedZoneArgs{
-				Name: "nuggies-life",
+				Name: "salinesel-in",
 			}, nil)
 			if err != nil {
 				return err
 			}
 
-			// create a single dns record
-			domain := "foo.nuggies.life"
+			// create a dns record for github pages
+			domain := "salinesel.in"
 			_, err = dns.NewRecordSet(ctx, domain, &dns.RecordSetArgs{
 				Name:        pulumi.String(domain + "."),
 				Type:        pulumi.String("A"),
 				Ttl:         pulumi.Int(1),
 				ManagedZone: pulumi.String(managedZone.Name),
-				Rrdatas:     pulumi.StringArray{pulumi.String("1.2.3.4")},
+				Rrdatas: pulumi.StringArray{
+					pulumi.String("185.199.108.153"),
+					pulumi.String("185.199.109.153"),
+					pulumi.String("185.199.110.153"),
+					pulumi.String("185.199.111.153"),
+				},
 			})
 			if err != nil {
 				return err
