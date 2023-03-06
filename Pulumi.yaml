@@ -1,3 +1,0 @@
-name: cloudlab
-runtime: go
-description: my cloud based homelab in pulumi!
