@@ -1,0 +1,14 @@
+{
+  "name": "cloudlab",
+  "version": "1.0.0",
+  "description": "This is a personal repository I use to publicly illustrate how I setup infrastructure as code in pulumi. If gitops, kubernetes, and infrastructure as code interests you, this repository is worth looking at.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@pulumi/linode": "^3.12.0"
+  }
+}
