@@ -1,12 +1,19 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as linode from "@pulumi/linode";
 
-// Create a Linode resource (Linode Instance)
-const instance = new linode.Instance("my-instance", {
-    type: "g6-nanode-1",
-    region: "us-east",
-    image: "linode/ubuntu18.04",
-});
+// globally used variables
+const standardName = "cloudlab"
+const region = "us-west"
 
-// Export the Instance label of the instance
-export const instanceLabel = instance.label;
+// create a kubernetes cluster
+const cluster = new linode.LkeCluster(standardName, {
+    k8sVersion: "1.25",
+    label: standardName,
+    region: region,
+    pools: [{
+        count: 3,
+        type: "g6-standard-1"
+    }]
+})
+
+export const clusterLabel = cluster.label
