@@ -16,6 +16,19 @@ const zones: zone[] = [
       dnsName: "norling.io.",
       dnssecConfig: {
         state: "on",
+        nonExistence: "nsec3",
+        defaultKeySpecs: [
+          {
+            algorithm: "rsasha256",
+            keyLength: 2048,
+            keyType: "keySigning",
+          },
+          {
+            algorithm: "rsasha256",
+            keyLength: 1024,
+            keyType: "zoneSigning",
+          },
+        ],
       },
     },
     opts: {
