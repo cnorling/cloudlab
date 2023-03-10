@@ -4,10 +4,9 @@ on:
     branches:
       - main
     paths:
-      - go.mod
-      - go.sum
-      - main.go
-      - pulumi.prod.yaml
+      - package-lock.json
+      - package.json
+      - pulumi.homelab.yaml
       - pulumi.yaml
 
 jobs:
@@ -15,26 +14,5 @@ jobs:
     name: Update
     runs-on: ubuntu-latest
     steps:
-      - id: checkout
-        uses: actions/checkout@v2
-
-      - id: setupgolang
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.16.x
-
-      - id: download-modules
-        run: go mod download
-
-      - id: gcp-auth
-        uses: google-github-actions/auth@v0.4.0
-        with:
-          credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
-
-      - id: pulumi-run
-        uses: pulumi/actions@v3
-        with:
-          command: up
-          stack-name: prod
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
