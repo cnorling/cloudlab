@@ -47,16 +47,19 @@ const domains: domain[] = [
           "185.199.110.153",
           "185.199.111.153",
         ],
+        ttl: 300,
       },
       {
         dnsname: "norling.io.",
         type: "MX",
         rrdatas: ["10 mx1.titan.email.", "20 mx2.titan.email."],
+        ttl: 300,
       },
       {
         dnsname: "norling.io.",
         type: "TXT",
         rrdatas: ['"v=spf1 include:spf.titan.email ~all"'],
+        ttl: 300,
       },
       {
         dnsname: "titan1._domainkey.norling.io.",
@@ -64,6 +67,7 @@ const domains: domain[] = [
         rrdatas: [
           '"v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDMw2YCVyR9M6MWEynk7qRcGqNLxax9rl36f9VWPziAe7cAPdoq9TjIh5o0grIqnpzfb1lUejgZ+rnP5h06FLPOK39gL2Ld6y92emrgYMDApXhW5VR3moStLg5gI60DWLtk4E3Nkk/XpFaaLsLLN4Y1xlOO2tbwyRQRhwqAm49PkwIDAQAB"',
         ],
+        ttl: 30,
       },
     ],
   },
