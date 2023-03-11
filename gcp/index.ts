@@ -67,6 +67,34 @@ const domains: domain[] = [
       },
     ],
   },
+  {
+    zone: {
+      name: "nuggies-life",
+      args: {
+        description: "nuggies are life",
+        name: "nuggies-life",
+        dnsName: "nuggies.life.",
+      },
+      opts: {
+        protect: true,
+      },
+    },
+    records: [],
+  },
+  {
+    zone: {
+      name: "salinesel-in",
+      args: {
+        description: "cloud dns zone for salinesel.in domain",
+        name: "salinesel-in",
+        dnsName: "salinesel.in.",
+      },
+      opts: {
+        protect: true,
+      },
+    },
+    records: [],
+  },
 ];
 
 export function CreateGCPInfrastructure() {
