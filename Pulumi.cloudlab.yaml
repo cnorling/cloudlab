@@ -1,2 +1,4 @@
 config:
   gcp:project: elite-protocol-319303
+  linode:region: us-west
+  linode:resname: "cloudlab"
