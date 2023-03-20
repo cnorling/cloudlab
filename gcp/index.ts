@@ -20,6 +20,7 @@ interface domain {
   records: record[];
 }
 
+const config = new pulumi.Config();
 const domains: domain[] = [
   {
     zone: {
@@ -101,6 +102,7 @@ const domains: domain[] = [
 ];
 
 export function CreateGCPInfrastructure() {
+  // create dns records
   domains.forEach((domain) => {
     // create the zone
     const zone = new gcp.dns.ManagedZone(
@@ -124,5 +126,26 @@ export function CreateGCPInfrastructure() {
         record.opts
       );
     });
+  });
+
+  // create dns serviceaccount for external-dns
+  const externalDnsSa = new gcp.serviceaccount.Account(
+    "external-dns-serviceaccount",
+    {
+      accountId: "external-dns",
+      displayName: "external-dns",
+    }
+  );
+
+  // add external-dns serviceaccount to dns admin group
+  new gcp.projects.IAMBinding("external-dns-permissions", {
+    project: "elite-protocol-319303",
+    role: "roles/dns.admin",
+    members: [externalDnsSa.email.apply((email) => `serviceAccount:${email}`)],
+  });
+
+  // create a key for the external-dns serviceaccount
+  new gcp.serviceaccount.Key("external-dns-key", {
+    serviceAccountId: externalDnsSa.name,
   });
 }
