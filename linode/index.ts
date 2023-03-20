@@ -1,17 +1,12 @@
-import * as pulumi from "@pulumi/pulumi";
 import * as linode from "@pulumi/linode";
+import * as k8s from "@pulumi/kubernetes";
 
 export function CreateLinodeInfrastructure() {
-  // import config settings
-  const config = new pulumi.Config();
-  const region = config.get("linode:region")!;
-  const resname = config.get("linode:resname")!;
-
   // create a kubernetes cluster
-  new linode.LkeCluster(resname, {
+  const k8sCluster = new linode.LkeCluster("cloudlab", {
     k8sVersion: "1.25",
-    label: resname,
-    region: region,
+    label: "cloudlab",
+    region: "us-west",
     pools: [
       {
         count: 3,
@@ -19,4 +14,21 @@ export function CreateLinodeInfrastructure() {
       },
     ],
   });
+
+  // initialize the provider
+  const provider = new k8s.Provider("linode-cluster", {
+    kubeconfig: k8sCluster.kubeconfig,
+  });
+
+  // install argocd
+  const argocd = new k8s.kustomize.Directory("argocd", {
+    directory: "https://github.com/cnorling/k8s/tree/main/argocd",
+  });
+
+  // install the app of apps
+  const appOfApps = new k8s.kustomize.Directory(
+    "app-of-apps",
+    { directory: "https://github.com/cnorling/k8s/tree/main/app-of-apps" },
+    { dependsOn: argocd }
+  );
 }
