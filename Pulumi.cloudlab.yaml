@@ -1,2 +1,3 @@
 config:
+  azure-native:location: eastus
   gcp:project: elite-protocol-319303
